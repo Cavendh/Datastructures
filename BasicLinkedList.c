@@ -6,6 +6,7 @@ typedef struct Node {
 
   char code[4];
   struct Node *Next;
+  struct Node *Previous;
 
 } NodeType;
 
@@ -22,6 +23,7 @@ void insertNewLastNode(char * NewCode, NodeType ** L) {
   if(*L == NULL) {
 
     *L = New;
+    (*L)->Previous = NULL;
 
 
 
@@ -33,6 +35,7 @@ void insertNewLastNode(char * NewCode, NodeType ** L) {
       Find = Find->Next;
 
     Find->Next = New;
+    New->Previous = Find;
 
 
 
@@ -81,6 +84,8 @@ void DeleteLastNode(NodeType ** L) {
 
     }
 
+    Last->Previous = NULL;
+
     free(Last);
     NextToLast->Next = NULL;
 
@@ -104,11 +109,26 @@ NodeType * nextNode(NodeType * L) {
 
 }
 
+NodeType * previousNode(NodeType * L) {
+
+  if(L->Previous != NULL) {
+
+    L = L->Previous;
+  } else {
+
+    printf("Start of List, Cant Move\n");
+  }
+
+  return L;
+
+}
+
 void printCurrNode(NodeType * L) {
 
   printf("%s\n", L->code);
 
 }
+
 
 
 int main(int argc, char * argv[]) {
@@ -169,6 +189,11 @@ int main(int argc, char * argv[]) {
     if(strncmp(command, "printAll", 8) == 0) {
 
       printlist(start);
+    }
+
+    if(strncmp(command, "Previous", 8) == 0) {
+
+      currNode = previousNode(currNode);
     }
 
 
