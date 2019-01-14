@@ -10,6 +10,104 @@ typedef struct Node {
 
 } NodeType;
 
+
+NodeType * insertNewNodeSort(char * NewCode, NodeType ** L) {
+
+
+  NodeType *New, *Find, *BeforeNew;
+  int trigger = 1;
+  int trigger2 = 1;
+  int i = 0;
+
+  New = (NodeType *)malloc(sizeof(NodeType));
+
+  strcpy(New->code, NewCode);
+
+  if(*L == NULL) {
+
+    *L = New;
+    (*L)->Previous = NULL;
+
+  } else {
+
+    Find = *L;
+
+    while(trigger == 1) {
+
+      if(New->code[i] < Find->code[i]) {
+
+        if(Find->Previous == NULL) {
+
+          New->Previous = NULL;
+          New->Next = Find;
+          Find->Previous = New;
+          trigger = 0;
+          trigger2 = 0;
+
+        } else {
+
+          BeforeNew = Find->Previous;
+          Find->Previous = New;
+          New->Next = Find;
+          New->Previous = BeforeNew;
+          BeforeNew->Next = New;
+          trigger = 0;
+
+        }
+
+
+      }
+
+      if(New->code[i] == Find->code[i]) {
+
+        i++;
+      }
+
+      if(New->code[i] > Find->code[i]) {
+
+        if(Find->Next == NULL) {
+
+           Find->Next = New;
+           New->Previous = Find;
+           New->Next = NULL;
+           trigger = 0;
+
+        } else {
+
+          Find = Find->Next;
+          i = 0;
+
+        }
+
+      }
+
+      if(i == 2 && New->code[i] == Find->code[i]) {
+
+        BeforeNew = Find->Previous;
+        Find->Previous = New;
+        New->Next = Find;
+        New->Previous = BeforeNew;
+        BeforeNew->Next = New;
+        trigger = 0;
+
+      }
+
+
+    }
+
+
+  }
+
+  if(trigger2 == 0) {
+
+    return New;
+  } else {
+
+    return (*L);
+  }
+
+}
+
 void insertNewLastNode(char * NewCode, NodeType ** L) {
 
   NodeType *New, *Find;
@@ -163,7 +261,8 @@ int main(int argc, char * argv[]) {
 
     currstring[3] = '\0';
 
-    insertNewLastNode(currstring, &start);
+    //insertNewLastNode(currstring, &start);
+    start = insertNewNodeSort(currstring, &start);
 
   }
 
