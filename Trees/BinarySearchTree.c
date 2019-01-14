@@ -5,9 +5,22 @@
 typedef struct node {
 
   int Value;
-  nodeType * Right, Left;
+  struct node * Right, * Left;
 
 } nodeType;
+
+
+void printList(nodeType * base) {
+
+    if(base != NULL) {
+
+      printList(base->Left);
+      printf("%d\n", base->Value);
+      printList(base->Right);
+
+    }
+
+}
 
 
 nodeType * insert(nodeType * base, int newKey) {
@@ -28,7 +41,7 @@ nodeType * insert(nodeType * base, int newKey) {
     base->Left = NULL;
 
 
-  }
+  } else {
 
   finder = base;
 
@@ -39,6 +52,7 @@ nodeType * insert(nodeType * base, int newKey) {
       if(finder->Left == NULL) {
 
         finder->Left = new;
+        trigger = 0;
 
       } else {
 
@@ -50,6 +64,7 @@ nodeType * insert(nodeType * base, int newKey) {
       if(finder->Right == NULL) {
 
         finder->Right = new;
+        trigger = 0;
 
       } else {
 
@@ -60,14 +75,39 @@ nodeType * insert(nodeType * base, int newKey) {
 
   }
 
+}
+
   return base;
 }
 
 
-int main() {
+int main(int argc, char * argv[]) {
 
   nodeType * start;
+  int currVal, i;
 
+  start = NULL;
+
+  if(argc == 2) {
+
+
+
+    for(i = 0; i < atoi(argv[1]); i++) {
+
+      fscanf(stdin, "%d", &currVal);
+
+      start = insert(start, currVal);
+
+    }
+
+  } else {
+
+    printf("Error: Usage - Items in Tree, File for list\n");
+    exit(0);
+  }
+
+
+  printList(start);
 
 
   return 0;
